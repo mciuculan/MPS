@@ -12,9 +12,9 @@ Output:
 
 Rolurile in echipa:
 
-PM - Maria Ciuculan
-TL - Ana Mihnea
-Dev - Andrei Cioban
-Dev - Dragos Paune
-Tester - Andrei Hirt
+- PM - Maria Ciuculan
+- TL - Ana Mihnea
+- Dev - Andrei Cioban
+- Dev - Dragos Paune
+- Tester - Andrei Hirt
 
