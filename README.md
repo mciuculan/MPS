@@ -8,3 +8,13 @@ Input:
 
 Output:
 - fișier text care conține modul de generare al arborelui de operații programatice
+
+
+Rolurile in echipa:
+
+PM - Maria Ciuculan
+TL - Ana Mihnea
+Dev - Andrei Cioban
+Dev - Dragos Paune
+Tester - Andrei Hirt
+
