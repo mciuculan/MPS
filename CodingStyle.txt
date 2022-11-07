@@ -1,0 +1,561 @@
+C++ Programming Style Guidelines
+
+1 Introduction
+This document lists C++ programming style guidelines for the STU (Space-Time-Uncertainty) research group led by Dr. Markus Schneider at the Department of Computer & Information Science & Engineering of the University of Florida. Most guidelines are commonly accepted in the C++ development community.
+1.1 Layout of the Recommendations.
+The recommendations are grouped by topic, and each recommendation is numbered to make it easier to refer to it during reviews. The layout of the recommendations is as follows:
+n. Guideline short description
+Example if applicable
+Motivation, background, and additional information.
+The motivation section is important since it is essential to state the background for the recommendation.
+1.2 Recommendation Importance
+In the guideline sections the terms must, should and can have a special meaning. A must requirement must be followed, a should requirement is a strong recommendation, and a can requirement is a general guideline.
+2 General Recommendations
+1. Any violation to this guide is allowed if it enhances readability.
+ 
+The main goal of this recommendation is to improve readability and thereby the understanding and the maintainability and general quality of the code. It is impossible to cover all the specific cases in a general guide, and the programmer should be flexible.
+2. The rules can be violated if there are strong personal objections against them.
+ 
+The attempt is to make a guideline, not to force a particular coding style onto individuals. Experienced programmers normally want to adopt a style like this anyway, but having one, and at least requiring everyone to get familiar with it, usually makes people start thinking about programming style and evaluate their own habits in this area.
+On the other hand, new and inexperienced programmers normally use a style guide as a convenience of getting into the programming jargon more easily.
+3 Naming Conventions
+3.1 General Naming Conventions
+3. Names representing types must be in mixed case starting with an upper case letter.
+Line, SavingsAccount
+This is common practice in the C++ development community.
+4. Variable names must be in mixed case starting with a lower case letter.
+line, savingsAccount
+This is common practice in the C++ development community. It makes variables easy to distinguish from types, and effectively resolves potential naming collisions as in the declaration Line line;
+5. Named constants (including enumeration values) must be all in uppercase and use underscore to separate words.
+MAX_ITERATIONS, COLOR_RED, PI
+This is common practice in the C++ development community.
+6. Names representing methods or functions must be verbs and written in mixed case starting with a lowercase letter.
+getName(), computeTotalWidth()
+This is common practice in the C++ development community. It is identical to variable names, but functions in C++ are already distinguishable from variables by their specific form.
+7. Names representing namespaces should be all in lowercase.
+model::analyzer, io::iomanager, common::math::geometry
+This is common practice in the C++ development community.
+8. Names representing template types should be a single uppercase letter.
+template<class T> ...
+template<class C, class D> ...
+This is common practice in the C++ development community. This makes template names stand out relative to all other names used. But the meaning of the single-letter template types should be explained in a comment.
+9. Abbreviations and acronyms must not be in uppercase when used as a name.
+exportHtmlSource(); // NOT: exportHTMLSource();
+openDvdPlayer(); // NOT: openDVDPlayer();
+
+Using all uppercase letters for the base name will give conflicts with the naming conventions given above. A variable of this type would have to be named dVD, hTML, etc. which is obviously not very readable. Another problem is illustrated in the examples above. When the name is connected to another, the readability is seriously reduced since the word following the abbreviation does not stand out as it should.
+10. Global variables should be avoided. But if they are used, they should always be referred to using the :: operator.
+::mainWindow.open(), ::applicationContext.getName()
+In general, the use of global variables should be avoided. Consider using singleton objects instead.
+11. Private class variables should have an underscore suffix.
+class SomeClass 
+{
+  private:
+    int length_;
+}
+Apart from its name and its type, the scope of a variable is its most important feature. Indicating class scope by using underscore makes it easy to distinguish class variables from local scratch variables. This is important because class variables are considered to have higher significance than method variables, and should be treated with special care by the programmer.
+A side effect of the underscore naming convention is that it nicely resolves the problem of finding reasonable variable names for setter methods and constructors:
+  void setDepth(int depth)
+  {
+    depth_ = depth;
+  }
+An issue is whether the underscore should be added as a prefix or as a suffix. Both practices are commonly used, but the latter is recommended because it seems to best preserve the readability of the name.
+It should be noted that scope identification in variables has been a controversial issue for quite some time. It seems, though, that this practice now is gaining acceptance and that it is becoming more and more common as a convention in the professional development community.
+12. All names should be written in English.
+fileName;   // NOT: filNavn
+
+English is the preferred language for international development.
+13. Variables with a large scope should have long names, variables with a small scope can have short names.
+ 
+Scratch variables used for temporary storage or indices are best kept short. A programmer reading such variables should be able to assume that its value is not used outside of a few lines of code. Common scratch variables for integers are i, j, k, m, n, and for characters c and d.
+14. The name of the object is implicit, and should be avoided in a method name.
+line.getLength();   // NOT: line.getLineLength();
+
+The latter seems natural in the class declaration but proves superfluous in use, as shown in the example.
+3.2 Specific Naming Conventions
+15. The terms get/set must be used where an attribute is accessed directly.
+employee.getName();
+employee.setName(name);
+
+matrix.getElement(2, 4);
+matrix.setElement(2, 4, value);
+This is common practice in the C++ development community.
+16. The term compute can be used in methods where something is computed.
+valueSet->computeAverage();
+matrix->computeInverse()
+The idea is to give the reader the immediate clue that this is a potentially time-consuming operation, and if used repeatedly, s/he might consider caching the result. A consistent use of the term enhances readability.
+17. The term initialize can be used where an object or a concept is established.
+printer.initializeFontSet();
+The American initialize should be preferred over the English initialise. The abbreviation init should be avoided.
+18. Variables representing GUI components should be suffixed by the component type name.
+mainWindow, propertiesDialog, widthScale, loginText,
+leftScrollbar, mainForm, fileMenu, minLabel, exitButton, yesToggle etc.
+This enhances readability since the name gives the user an immediate clue of the type of the variable and thereby the objects resources.
+19. Plural form should be used on names representing a collection of objects.
+vector<Point> points;
+int values[];
+This enhances readability since the name gives the user an immediate clue of the type of the variable and the operations that can be performed on its elements.
+20. The prefix n should be used for variables representing a number of objects.
+nPoints, nLines
+The notation is taken from mathematics where it is an established convention for indicating a number of objects.
+21.The suffix No should be used for variables representing an entity number.
+tableNo, employeeNo
+The notation is taken from mathematics where it is an established convention for indicating an entity number.
+
+No -> numerical value (int)
+Id -> alphanumerical value (int, letter)
+22. Iterator variables should be called i, j, k etc.
+for (int i = 0; i < nTables; i++)
+{
+  ...
+}
+
+for (vector<MyClass>::iterator i = list.begin(); i != list.end(); i++) 
+{
+  Element element = *i;
+  ...
+}
+The notation is taken from mathematics where it is an established convention for indicating iterators.
+Variables named j, k, etc. should be used for nested loops only.
+23. The prefix is should be used for boolean variables and methods.
+isSet, isVisible, isFinished, isFound, isOpen
+This is common practice in the C++ development community.
+Using the is prefix solves a common problem of choosing bad Boolean names like status or flag. isStatus or isFlag simply doesn't fit, and the programmer is forced to choose more meaningful names.
+There are a few alternatives to the is prefix that fit better in some situations. These are the has, can, and should prefixes:
+ bool hasLicense();
+ bool canEvaluate();
+ bool shouldSort();
+24. Complement names must be used for complement operations.
+get/set, add/remove, create/destroy, start/stop, insert/delete,
+increment/decrement, old/new, begin/end, first/last, up/down, min/max,
+next/previous, old/new, open/close, show/hide, suspend/resume, etc.
+This reduces complexity by symmetry.
+25. Abbreviations in names should be avoided.
+computeAverage();   // NOT: compAvg();
+
+There are two types of words to consider. First, there are the common words listed in a language dictionary. These must never be abbreviated. Never write:
+cmd   instead of   command
+cp    instead of   copy
+pt    instead of   point
+comp  instead of   compute
+init  instead of   initialize
+etc.
+Then there are domain specific phrases that are more naturally known through their abbreviations/acronym. These phrases should be kept abbreviated. Never write:
+HypertextMarkupLanguage  instead of   html
+CentralProcessingUnit    instead of   cpu
+PriceEarningRatio        instead of   pe
+etc.
+26. Negated Boolean variable names must be avoided.
+bool isError; // NOT: isNoError
+bool isFound; // NOT: isNotFound
+
+The problem arises when such a name is used in conjunction with the logical negation operator as this results in a double negative. It is not immediately apparent what !isNotFound means.
+27. Enumeration constants can be prefixed by a common type name.
+enum Color 
+{
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_BLUE
+};
+This gives additional information of where the declaration can be found, which constants belong together, and what concept the constants represent.
+An alternative approach is to always refer to the constants through their common type: Color::RED, Airline::AIR_FRANCE etc.
+Note also that the enum name typically should be singular as in enum Color{...}. A plural name like enum Colors{...} may look fine when declaring the type, but it will look silly in use.
+28. Exception classes should be suffixed with Exception.
+class AccessException
+{
+  ...
+}
+Exception classes are really not part of the main design of the program, and naming them like this makes them stand out relative to the other classes.
+29. Functions (methods returning something) should be named after what they return and procedures (void methods) after what they do.
+ 
+This increases readability. It makes it clear what the unit should do and especially all the things it is not supposed to do. This again makes it easier to keep the code clean of side effects.
+4 Files
+4.1 Source Files
+30. C++ header files should have the extension .h. Source files should have the extension .cpp.
+MyClass.cpp, MyClass.h
+These are all accepted C++ standards for file extensions. Header files exclusively contain class declarations while source files contain the definitions (implementations) of the class concepts.
+31. A class should be declared in a header file and defined in a source file where the names of the files match the name of the class.
+MyClass.h, MyClass.cpp
+This makes it easy to find the associated files of a given class. A special case are template classes that must be both declared and defined inside a .h file. But since a separation of declaration and definition is quite important, a header file MyClass.h for the declarations and a source file MyClass.cpp.h for the definitions should be created, and the header file should obtain the line #include "MyClass.cpp.h" at its end.
+32. All definitions should reside in source files.
+class MyClass
+{
+  public:
+    int getValue () {return value_;} // NO!
+    ...
+
+  private: int value_;
+}
+A header file should declare an interface, a source file should implement it. When looking for an implementation, the programmer should always know that it is found in the source file.
+33. File content must be kept within 80 columns.
+ 
+80 columns is a common dimension for editors, terminal emulators, printers, and debuggers. Files that are shared between several people should keep these constraints. It improves readability when unintentional line breaks are avoided when passing a file between programmers.
+34. Special characters like TAB and page break must be avoided.
+ 
+These characters are bound to cause problem for editors, printers, terminal emulators, or debuggers when used in a multi-programmer, multi-platform environment.
+35. The incompleteness of split lines must be made obvious.
+totalSum = a + b + c +
+           d + e; 
+
+function (param1, param2,
+          param3);
+
+setText ("Long line split"
+         "into two parts.");
+
+for (int tableNo = 0; tableNo < nTables;
+     tableNo + = tableStep) 
+{
+  ...
+}
+Split lines occurs when a statement exceeds the 80 column limit given above. It is difficult to give rigid rules for how lines should be split, but the examples above should give a general hint.
+In general:
+•	Break after a comma.
+•	Break after an operator.
+•	Align the new line with the beginning of the expression on the previous line.
+4.2 Include Files and Include Statements
+36. Header files must contain an include guard.
+#ifndef CLASSNAME_H
+#define CLASSNAME_H
+  ...
+#endif // CLASSNAME_H
+The construction is to avoid compilation errors. The name convention resembles the location of the file inside the source tree and prevents naming conflicts.
+37. Include statements should be sorted and grouped. They should be sorted by their hierarchical position in the system with low level files included first. An empty line should be left between groups of include statements.
+#include <fstream>
+#include <iomanip>
+
+#include <qt/qbutton.h>
+#include <qt/qtextfield.h>
+In addition to showing the reader the individual include files, it also gives an immediate clue about the modules that are involved.
+Include file paths must never be absolute. Compiler directives should instead be used to indicate root directories for includes.
+38. Include statements must be located at the top of a file only.
+ 
+This is common practice. One should avoid unwanted compilation side effects by "hidden" include statements deep into a source file. An exception is the handling of template classes (see above).
+5 Statements
+5.1 Types
+39. Types that are local to one file only can be declared inside that file.
+ 
+This enforces information hiding.
+40. The parts of a class must be sorted public, protected, and private. All sections must be identified explicitly. Not applicable sections should be left out.
+ 
+The ordering is "most public first" so that people who only wish to use the class can stop reading when they reach the protected/private sections.
+41. Type conversions must always be done explicitly. One should never rely on implicit type conversion.
+floatValue = static_cast<float>(intValue); // NOT: floatValue = intValue;
+
+By this, the programmer indicates that he is aware of the different types involved and that the mix is intentional.
+5.2 Variables
+42. Variables should be initialized where they are declared.
+
+This ensures that variables are valid at any time. Sometimes, it is impossible to initialize a variable to a valid value where it is declared. Here is an example:
+  int x, y, z;
+  getCenter(&x, &y, &z);
+In these cases, variables should be left uninitialized rather than initialized to some phony value.
+43. Variables must never have dual meaning.
+ 
+Enhance readability by ensuring all concepts are represented uniquely. Reduce chance of error by side effects.
+44. Use of global variables should be minimized.
+ 
+In C++ there is no reason to use global variables at all. The same is true for global functions or static (file scope) variables.
+45. Class variables should never be declared as public variables, and also not as private or protected variables. Instead, they should be hidden in the .cpp file by employing the opaque pointer technique. Class objects should only be set, gotten, and manipulated by methods.
+ 
+The concept of C++ information hiding and encapsulation is violated by public variables. Unfortunately, although the use of private or protected variables makes their access impossible for the user, the user can still read implementation details and make his conclusions from them. For each change of the implementation, the header file, that is, the interface, would then have to  be changed. Instead, access methods should be used.
+Note that structs are kept in C++ for compatibility with C only, and avoiding them increases the readability of the code by reducing the number of constructs used. Use a class instead.
+46. C++ pointers and references should have their reference symbol next to the type rather than to the name.
+float* x;  // NOT: float *x; 
+int& y;    // NOT: int &y;
+
+The pointer-ness or reference-ness of a variable is a property of the type rather than the name. C programmers often use the alternative approach, while in C++ it has become more common to follow this recommendation.
+47. Implicit test for 0 should not be used other than for boolean variables and pointers.
+if (nLines != 0)  // NOT: if (nLines)
+if (value != 0.0) // NOT: if (value)
+It is not necessarily defined by the C++ standard that integers and floats implement 0 as binary 0. Also, by using an explicit test, the statement gives an immediate clue of the type being tested.
+It is common also to suggest that pointers shouldn't test implicitly for 0 either, i.e. if (line == 0) instead of if (line). The latter is regarded so common in C/C++ however that it can be used.
+48. Variables should be declared in the smallest scope possible.
+ 
+By keeping the operations on a variable within a small scope, it is easier to control the effects and side effects of the variable.
+5.3 Loops
+49. Only loop control statements must be included in the for() construction.
+sum = 0;                         // NOT: for (i = 0, sum = 0; i < 100; i++)
+for (i = 0; i < 100; i++)                  sum += value[i];
+  sum += value[i];
+This increases maintainability and readability. It is important to make a clear distinction of what controls and what is contained in the loop.
+50. Loop variables should be initialized immediately before the loop.
+isDone = false;          // NOT: bool isDone = false;
+while (!isDone) {        //      ...
+{                        //      while (!isDone)
+  ...                    //      {
+}                        //        ...
+                         //      }
+ 
+51. do-while loops can be avoided.
+ 
+do-while loops are less readable than ordinary while loops and for loops since the conditional is at the bottom of the loop. The reader must scan the entire loop in order to understand the scope of the loop.
+In addition, do-while loops are not needed. Any do-while loop can easily be rewritten into a while loop or a for loop. Reducing the number of constructs used enhances readbility.
+52. The use of break and continue in loops should be avoided.
+ 
+These statements should only be used if they give higher readability than their structured counterparts.
+53. The form while(true) should be used for infinite loops.
+while (true) 
+{
+  ...
+}
+
+for (;;) // NO!
+{
+  ...
+}
+
+while (1) // NO!
+{
+  ...
+}
+Testing against 1 is neither necessary nor meaningful. The form for (;;) is not very readable, and it is not apparent that this actually is an infinite loop.
+5.4 Conditionals
+54. Complex conditional expressions must be avoided. Introduce temporary Boolean variables instead.
+bool isFinished = (elementNo < 0) || (elementNo > maxElement);
+bool isRepeatedEntry = elementNo == lastElement;
+if (isFinished || isRepeatedEntry) 
+{
+  ...
+}
+
+// NOT:
+if ((elementNo < 0) || (elementNo > maxElement) || elementNo == lastElement)
+{
+  ...
+}
+By assigning Boolean variables to expressions, the program gets automatic documentation. The construction will be easier to read, debug, and maintain.
+55. The nominal case should be put in the if-part and the exception in the else-part of an if statement.
+bool isOk = readFile(fileName);
+if (isOk) 
+{
+  ...
+}
+else 
+{
+  ...
+}
+One should make sure that the exceptions do not obscure the normal path of execution. This is important for both the readability and the performance.
+56. The conditional should be put on a separate line.
+if (isDone) // NOT: if (isDone) doCleanup();
+  doCleanup();
+This is for debugging purposes. When writing on a single line, it is not apparent whether the test is really true or not.
+57. Executable statements in conditionals must be avoided.
+File* fileHandle = open(fileName, "w");
+if (fileHandle != null) 
+{
+  ...
+}
+
+// NOT:
+if (!(fileHandle = open(fileName, "w"))) 
+{
+  ...
+}
+Conditionals with executable statements are very difficult to read.
+5.5 Miscellaneous
+58. The use of magic numbers in the code should be avoided. Numbers other than 0 and 1 should be considered declared as named constants instead.
+ 
+If the number does not have an obvious meaning by itself, the readability is enhanced by introducing a named constant instead. A different approach is to introduce a method from which the constant can be accessed.
+59. Floating point constants should always be written with decimal point and at least one decimal.
+double total = 0.0;    // NOT: double total = 0;
+double speed = 3.0e8;  // NOT: double speed = 3e8;
+
+double sum;
+...
+sum = (a + b) * 10.0;
+This emphasizes the different nature of integer and floating point numbers. Mathematically the two kinds of numbers model completely different and non-compatible concepts.
+In addition, as in the last example above, it emphasizes the type of the assigned variable (sum) at a point in the code where this might not be evident.
+60. Floating point constants should always be written with a digit before the decimal point.
+double total = 0.5;  // NOT: double total = .5;
+
+The number and expression system in C++ is borrowed from mathematics and one should adhere to mathematical conventions for syntax wherever possible. Also, 0.5 is a lot more readable than .5. There is no way it can be mixed with the integer 5.
+61. Functions must always have the return value explicitly listed.
+int getValue()  // NOT: getValue()
+{
+  ...
+}
+If not exlicitly listed, C++ implies an int value as a return value for functions. A programmer must never rely on this feature, since this might be confusing for programmers not aware of this artifact.
+62. goto should not be used.
+ 
+Goto statements violate the idea of structured code. Only in some very few cases (for instance, breaking out of deeply nested structures) should goto be considered, and only if the alternative structured counterpart is proven to be less readable.
+6 Layout and Comments
+6.1 Layout
+63. Basic indentation should be 2.
+for (i = 0; i < nElements; i++)
+  a[i] = 0;
+Indentation of 1 is too small to emphasize the logical layout of the code. Indentation larger than 4 makes deeply nested code difficult to read and increases the chance that the lines must be split. Choosing between indentation of 2, 3 and 4,  2 and 4 are the more common, and 2 is chosen to reduce the chance of splitting code lines.
+64. The block layout must be as illustrated below.
+while (!done)
+{
+  doSomething();
+  done = moreToDo();
+}
+
+// NOT:
+// while (!done) {
+//   doSomething();
+//   done = moreToDo();
+// }
+
+// NOT:
+// while (!done)
+//   {
+//     doSomething();
+//     done = moreToDo();
+//   }
+While there are different proposed block layouts, the selected one shows the block layout in the best manner.
+65. The class declarations should have the following form:
+class SomeClass : public BaseClass
+{
+  public:
+    ...
+
+  protected:
+    ...
+
+  private:
+    ...
+}
+This follows partly from the general block rule above.
+66. Method definitions should have the following form:
+void someMethod()
+{
+  ...
+}
+This follows from the general block rule above.
+67. The if-else class of statements should have the following form:
+if (condition) 
+{
+  statements;
+}
+
+if (condition) 
+{
+  statements;
+}
+else 
+{
+  statements;
+}
+
+if (condition) 
+{
+  statements;
+}
+else if (condition) 
+{
+  statements;
+}
+else 
+{
+  statements;
+}
+This follows partly from the general block rule above.
+68. A for statement should have the following form:
+for (initialization; condition; update) 
+{
+  statements;
+}
+This follows from the general block rule above.
+69. A while statement should have the following form:
+while (condition) 
+{
+  statements;
+}
+This follows from the general block rule above.
+70. A do-while statement (This type of loop can and should be avoided) should have the following form:
+do 
+{
+  statements;
+} while (condition);
+This follows from the general block rule above.
+71. A switch statement should have the following form:
+switch (condition) 
+{
+  case ABC :
+    statements;
+    // Fallthrough
+
+  case DEF :
+    statements;
+    break;
+
+  case XYZ :
+    statements;
+    break;
+
+  default :
+    statements;
+    break;
+}
+Note that each case keyword is indented relative to the switch statement as a whole. This makes the entire switch statement stand out. Note also the extra space before the : character. The explicit Fallthrough comment should be included whenever there is a case statement without a break statement. Leaving the break out is a common error, and it must be made clear that it is intentional when it is not there.
+72. A try-catch statement should have the following form:
+try 
+{
+  statements;
+}
+catch (Exception& exception) 
+{
+  statements;
+}
+This follows partly from the general block rule above.
+73. The statements if-else, for, or while can be written without brackets if they are single statements.
+if (condition)
+  statement;
+
+while (condition)
+  statement;
+
+for (initialization; condition; update)
+  statement;
+It is a common recommendation that brackets should always be used in all these cases. However, brackets are, in general, a language construct that groups several statements. Brackets are per definition superfluous on a single statement. A common argument against this syntax is that the code will break if an additional statement is added without also adding the brackets. In general however, code should never be written to accommodate for changes that might arise.
+6.2 White Space
+74. The following rules should be followed with respect to white space:
+- Conventional operators should be surrounded by a space character.
+- C++ reserved words should be followed by a white space.
+- Commas should be followed by a white space.
+- Colons should be surrounded by white space.
+- Semicolons in for statments should be followed by a space character.
+a = (b + c) * d;  // NOT: a=(b+c)*d
+
+while (true) ...  // NOT: while(true) ... 
+
+doSomething(a, b, c, d);  // NOT: doSomething(a,b,c,d);
+
+case 100 : // NOT: case 100:
+
+for (i = 0; i < 10; i++) ...  // NOT: for(i=0;i<10;i++) ...
+This makes the individual components of the statements stand out and enhances readability.
+75. Logical units within a block should be separated by one blank line.
+Matrix4x4 matrix = new Matrix4x4();
+
+double cosAngle = Math.cos(angle);
+double sinAngle = Math.sin(angle);
+
+matrix.setElement(1, 1, cosAngle);
+matrix.setElement(1, 2, sinAngle);
+matrix.setElement(2, 1, -sinAngle);
+matrix.setElement(2, 2, cosAngle);
+
+multiply(matrix);
+This enhances readability by introducing white space between logical units of a block.
+76. Methods should be separated by two blank lines.
+ 
+By making the space larger than space within a method, the methods will stand out within the class.
+6.3 Comments
+77. Tricky code should not be commented but rewritten!
+ 
+In general, the use of comments should be minimized by making the code self-documenting by appropriate name choices and an explicit logical structure.
+78. All comments should be written in English.
+ 
+In an international environment English is the preferred language.
+79. // should be used for all comments, including multi-line comments.
+// Comment spanning
+// more than one line.
+Since multilevel C-commenting is not supported, using // comments ensures that it is always possible to comment out entire sections of a file by using /* */ for debugging purposes etc.
+There should be a space between the "//" and the actual comment, and comments should always start with an upper case letter and end with a period.
+80. Class and method header comments should follow the JavaDoc conventions.
+ 
+Regarding a standardized class and method documentation, the Java development community is more mature than the C/C++ one. This is due to the standard automatic Javadoc tool that is part of the development kit and that helps producing high quality hypertext documentation from these comments.
+There are Javadoc-like tools available also for C++. These follows the same tagging syntax as Javadoc. See for instance Doc++ or Doxygen.
