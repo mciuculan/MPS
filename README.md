@@ -12,8 +12,8 @@ Output:
 
 Rolurile in echipa:
 
-- PM - Maria Ciuculan
-- TL - Ana Mihnea
+- Project Manager - Maria Ciuculan
+- Team Leader - Ana Mihnea
 - Dev - Andrei Cioban
 - Dev - Dragos Paune
 - Tester - Andrei Hirt
