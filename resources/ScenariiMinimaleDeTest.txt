@@ -1,0 +1,15 @@
+Implementare functii drept operatii pentru combinarea nodurilor
+-	Pentru inputuri valide se verifica daca este rezultatul correct
+-	Pentru inputuri mai speciale (negative, nule, etc) se verifica rezultatul
+-	Pentru numar corect/gresit de inputuri se verifica rezultatul
+Parsare set date
+-	Se verifica deschiderea unui fisier
+-	Se verifica daca au fost citite toate datele
+-	Se verifica daca in cazul unui fisier larg este sau nu buffer overflow
+Stocare F-Measureuri
+-	Se verifica daca au fost salvate toate valorile in mod correct
+
+Generare arbore de Evaluare
+-	Se verifica crearea nodurilor
+-	Se verifica valorile din noduri daca exista in urma atribuirii functiilor si threshold-urilor
+-	Se verifica daca sunt facute correct legaturile intre noduri (intre copii/parinte)
