@@ -1,81 +1,96 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <cstdlib>
-#include <cmath>
+#include "parser.h"
 
-using namespace std;
+Parser::Parser() {}
 
-/*
-    Functia returneaza o matrice cu doua randuri
-    conform fiecarui fisier CSV dat
-*/
-vector<vector<double>> parse_thr(string fname) {
-    vector<vector<string>> content;
-    vector<string> row;
-
-    vector<vector<double>> thresholds;
-    vector<double> d_numbers;
-
-    string line, word;
-    double temp_double = 0;
-
-    fstream file (fname, ios::in);
-    if(file.is_open()) {
-        while(getline(file, line)) {
-            row.clear();
-            
-            stringstream str(line);
-            
-            while(getline(str, word, ','))
-                row.push_back(word);
-            content.push_back(row);
-        }
-    } else {
-        cout << "Could not open the file\n";
-    }
-    
-    for(int i = 0; i < content.size(); i++) {
-        d_numbers.clear();
-        for(int j = 0; j < content[i].size(); j++) {
-            // Acest atof pierde din precizie din ce am vazut, puteti decomenta 41 ca sa vedeti
-            temp_double = atof(content[i][j].c_str());
-            // cout << content[i][j] << " --> " << temp_double << "\n";
-            d_numbers.push_back(temp_double);
-        }
-        thresholds.push_back(d_numbers);
-    }
-
-    return thresholds;
+Parser::Parser(std::string filePath)
+{
+	setFilePath(filePath);
 }
 
-void get_max(double &max_alg, double &max_Fmeasure,
-    vector<vector<double>> thresholds) {
-        double temp_double = 0;
+void Parser::parseFile()
+{
+	std::fstream fs;
 
-        for (int j = 0; j < thresholds[0].size(); ++j) {
-            temp_double = floor(thresholds[0][j] * 255);
+	fs.open(filePath, std::ios::in);
 
-            if (thresholds[1][temp_double] > max_Fmeasure) {
-                max_Fmeasure = thresholds[1][temp_double];
-                max_alg = thresholds[0][j];
-            }
-        }
-    }
+	std::string line, temp, word;
+	int currLineIndex = 0;
 
-int main() {
-    string fname = "[AVE_INT] 2_1.CSV";
-    
-    double temp_double, max_Fmeasure = 0, max_alg = 0;
- 
-    vector<vector<double>> thresholds = parse_thr(fname);
+	while (fs >> line) {
+		std::stringstream str(line);
 
-    get_max(max_alg, max_Fmeasure, thresholds);
+		if (!currLineIndex) {
+			getline(str, word, ',');
+			idealThreshold = std::stod(word);
 
-    cout << "max_alg = " << max_alg << "\n";
-    cout << "max_Fmeasure = " << max_Fmeasure << "\n";
+			while (getline(str, word, ',')) {
+				thresholds.push_back(std::stod(word));
+			}
+		} else {
+			while (getline(str, word, ',')) {
+				fMeasures.push_back(std::stod(word));
+			}
+		}
 
-    return 0;
+		currLineIndex++;
+	}
+
+	fs.close();
+}
+
+int Parser::getFMeasureIndex(double threshold)
+{
+	return floor(threshold * 255);
+}
+
+std::pair<double, double> Parser::getMaxScoreByThreshold()
+{
+	std::vector<int> scoreIndexes(thresholds.size());
+	std::vector<double> scores;
+
+	std::transform(thresholds.begin(), thresholds.end(), scoreIndexes.begin(), getFMeasureIndex);	
+	for (auto index : scoreIndexes) {
+		scores.push_back(getFMeasures()[index]);
+	}
+
+	std::pair<double, double> maxScoreByThreshold;
+	double tempScore = 0;
+
+	for (int i = 0; i < scores.size(); ++i) {
+		if (scores[i] > tempScore) {
+			tempScore = maxScoreByThreshold.second =  scores[i];
+			maxScoreByThreshold.first = thresholds[i];
+		}
+	}
+
+	return maxScoreByThreshold;
+}
+
+void Parser::setFilePath(std::string filePath)
+{
+	this->filePath = filePath;
+}
+
+void Parser::setThresholds(std::vector<double> thresholds)
+{
+	this->thresholds = thresholds;
+}
+
+void Parser::setFMeasures(std::vector<double> fMeasures)
+{
+	this->fMeasures = fMeasures;
+}
+
+int main()
+{
+	Parser parser;
+	
+	parser.setFilePath("../../mps-global/MPS-Global/[AVE_INT] 2_1.CSV");
+	parser.parseFile();
+
+	auto pair = parser.getMaxScoreByThreshold();	
+	std::cout.precision(12);
+	std::cout << pair.first << " " << pair.second << "\n";
+
+	return 0;
 }
