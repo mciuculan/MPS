@@ -1,23 +1,32 @@
-cmake_minimum_required(VERSION 3.10)
-project(MpsProject)
+# minimum version of cmake utility - usually the one in which this file was created
+cmake_minimum_required(VERSION 3.20)
 
-set( CMAKE_CXX_COMPILER "C:/msys64/mingw64/bin/g++.exe" )
-set( CMAKE_C_COMPILER "C:/msys64/mingw64/bin/gcc.exe" )
+# set the project name
+set (PROJECT_NAME "MPS Project")
 
-include_directories(main)
+# set the PROJECT_ID which will be the target name by changing every
+# non-alphanumeric character in PROJECT_NAME to an underscore
+string (MAKE_C_IDENTIFIER "${PROJECT_NAME}" PROJECT_ID)
+# i.e. CPP Tutorial -> CPP_Tutorial
 
+# change the PROJECT_ID to lower case
+string (TOLOWER ${PROJECT_ID} PROJECT_ID)
+# i.e. CPP_Tutorial -> cpp_tutorial
+
+# set the project for CMake
+project(${PROJECT_NAME})
+
+# include the CMakeLists.txt in src
+# this will run everything in that file
 add_subdirectory(main)
-add_subdirectory(test)
-add_subdirectory(lib/googletest)
 
-cmake_minimum_required(VERSION 3.12) # version can be different
+# add option for building tests
+option(BUILD_TESTS "Build tests also for ${PROJECT_NAME}" OFF)
 
-project(my_cpp_project) #name of your project
-
-add_subdirectory(lib/googletest) # add googletest subdirectory
-
-include_directories(lib/googletest/include) # this is so we can #include <gtest/gtest.h>
-
-# add_executable(mytests mytests.cpp) # add this executable
-
-# target_link_libraries(mytests PRIVATE gtest) # link google test to this executable
+# if tests should be build
+# add the subdirectory(with CMakeLists.txt) for tests
+if (BUILD_TESTS)
+	set(BUILD_GMOCK ON)
+	add_subdirectory(lib/googletest)
+	add_subdirectory(tests)
+endif()

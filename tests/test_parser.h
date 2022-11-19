@@ -1,5 +1,6 @@
 #include "../main/parser/parser.h"
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
 class TestParser : public ::testing::Test
 {
@@ -10,5 +11,5 @@ public:
 
 
 public:
-	static Parser parser;
+	Parser parser;
 };
