@@ -1,48 +1,23 @@
-# set a variable that contains the list
-# of source files to be built for our targets
-set(${PROJECT_ID}_SOURCES
-	parser/parser.cpp
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_MIN_REQ_VERSION "3.10")
+
+project("MPS_Project")
+
+add_subdirectory(tests)
+
+# option(BUILD_TESTS "Build tests also for ${PROJECT_NAME}" OFF)
+
+include_directories(tests/)
+
+file(GLOB PROJECT_SOURCES parser/*.cpp)
+file(GLOB PROJECT_HEADERS parser/*.h)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
+
+add_executable(
+	${PROJECT_NAME}
+	${PROJECT_SOURCES}
+	${PROJECT_HEADERS}
 )
 
-# the PROJECT_ID target shall be an executable
-add_executable(${PROJECT_ID})
-
-# set the source files to be built into the executable
-target_sources(${PROJECT_ID}
-	PRIVATE
-		${${PROJECT_ID}_SOURCES}
-)
-
-# provide private include paths for our executable
-target_include_directories(${PROJECT_ID}
-	PRIVATE
-		.
-)
-
-# set the C++ 20 standard
-target_compile_features(${PROJECT_ID}
-	PRIVATE
-		cxx_std_20
-)
-
-add_library(${PROJECT_ID}-static STATIC)
-
-target_sources(${PROJECT_ID}-static
-	PRIVATE
-		${${PROJECT_ID}_SOURCES}
-)
-
-target_include_directories(${PROJECT_ID}-static
-	PRIVATE
-		.
-        ../tests
-)
-
-target_compile_features(${PROJECT_ID}-static
-	PRIVATE
-		cxx_std_20
-)
-
-# clear the ${PROJECT_ID}_SOURCES variable
-# so we don't pollute everything
-unset (${PROJECT_ID}_SOURCES)
+target_link_libraries(${PROJECT_NAME} Tests)

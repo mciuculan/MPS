@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "../tests/test_parser.h"
 
 Parser::Parser() {}
 
@@ -81,16 +82,26 @@ void Parser::setFMeasures(std::vector<double> fMeasures)
 	this->fMeasures = fMeasures;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-	Parser parser;
-	
-	parser.setFilePath("../../mps-global/MPS-Global/[AVE_INT] 2_1.CSV");
-	parser.parseFile();
+	std::string mode;
+	std::cin>>mode;
 
-	auto pair = parser.getMaxScoreByThreshold();	
-	std::cout.precision(12);
-	std::cout << pair.first << " " << pair.second << "\n";
+	if (mode.compare("run")) {
+		Parser parser;
+	
+		parser.setFilePath("../../mps-global/MPS-Global/[AVE_INT] 2_1.CSV");
+		parser.parseFile();
+
+		auto pair = parser.getMaxScoreByThreshold();	
+		std::cout.precision(12);
+		std::cout << pair.first << " " << pair.second << "\n";\
+	}
+	
+
+	if (mode.compare("test")) {
+		return run_tests(argc, argv);
+	}
 
 	return 0;
 }

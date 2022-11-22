@@ -32,9 +32,14 @@ TEST_F(TestParser, parseFile_should_fail_when_file_missing)
     parser.parseFile();
 }
 
-int main(int argc, char* argv[])
-{
-    // ::testing::InitGoogleTest(&argc, argv);
+int run_tests(int argc, char **argv) {
     ::testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
 }
+
+// int main(int argc, char* argv[])
+// {
+//     // ::testing::InitGoogleTest(&argc, argv);
+//     ::testing::InitGoogleMock(&argc, argv);
+//     return RUN_ALL_TESTS();
+// }
