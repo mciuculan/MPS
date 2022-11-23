@@ -85,7 +85,7 @@ int main()
 {
 	Parser parser;
 	
-	parser.setFilePath("../../mps-global/MPS-Global/[AVE_INT] 2_1.CSV");
+	parser.setFilePath("../../data/MPS-Global/[AVE_INT] 2_1.CSV");
 	parser.parseFile();
 
 	auto pair = parser.getMaxScoreByThreshold();	
