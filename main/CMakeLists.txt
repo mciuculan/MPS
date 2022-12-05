@@ -12,7 +12,7 @@ include_directories(tests/)
 file(GLOB PROJECT_SOURCES parser/*.cpp)
 file(GLOB PROJECT_HEADERS parser/*.h)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
 
 add_executable(
 	${PROJECT_NAME}

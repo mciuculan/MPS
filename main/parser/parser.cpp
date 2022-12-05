@@ -17,18 +17,24 @@ void Parser::parseFile()
 	std::string line, temp, word;
 	int currLineIndex = 0;
 
-	while (fs >> line) {
+	while (fs >> line)
+	{
 		std::stringstream str(line);
 
-		if (!currLineIndex) {
+		if (!currLineIndex)
+		{
 			getline(str, word, ',');
 			idealThreshold = std::stod(word);
 
-			while (getline(str, word, ',')) {
+			while (getline(str, word, ','))
+			{
 				thresholds.push_back(std::stod(word));
 			}
-		} else {
-			while (getline(str, word, ',')) {
+		}
+		else
+		{
+			while (getline(str, word, ','))
+			{
 				fMeasures.push_back(std::stod(word));
 			}
 		}
@@ -49,17 +55,20 @@ std::pair<double, double> Parser::getMaxScoreByThreshold()
 	std::vector<int> scoreIndexes(thresholds.size());
 	std::vector<double> scores;
 
-	std::transform(thresholds.begin(), thresholds.end(), scoreIndexes.begin(), getFMeasureIndex);	
-	for (auto index : scoreIndexes) {
+	std::transform(thresholds.begin(), thresholds.end(), scoreIndexes.begin(), getFMeasureIndex);
+	for (auto index : scoreIndexes)
+	{
 		scores.push_back(getFMeasures()[index]);
 	}
 
 	std::pair<double, double> maxScoreByThreshold;
 	double tempScore = 0;
 
-	for (int i = 0; i < scores.size(); ++i) {
-		if (scores[i] > tempScore) {
-			tempScore = maxScoreByThreshold.second =  scores[i];
+	for (int i = 0; i < scores.size(); ++i)
+	{
+		if (scores[i] > tempScore)
+		{
+			tempScore = maxScoreByThreshold.second = scores[i];
 			maxScoreByThreshold.first = thresholds[i];
 		}
 	}
@@ -82,24 +91,25 @@ void Parser::setFMeasures(std::vector<double> fMeasures)
 	this->fMeasures = fMeasures;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	std::string mode;
-	std::cin>>mode;
+	std::cin >> mode;
 
-	if (mode.compare("run")) {
+	if (mode.compare("run") == 0)
+	{
 		Parser parser;
-	
+
 		parser.setFilePath("../../mps-global/MPS-Global/[AVE_INT] 2_1.CSV");
 		parser.parseFile();
 
-		auto pair = parser.getMaxScoreByThreshold();	
+		auto pair = parser.getMaxScoreByThreshold();
 		std::cout.precision(12);
-		std::cout << pair.first << " " << pair.second << "\n";\
+		std::cout << pair.first << " " << pair.second << "\n";
 	}
-	
 
-	if (mode.compare("test")) {
+	if (mode.compare("test") == 0)
+	{
 		return run_tests(argc, argv);
 	}
 

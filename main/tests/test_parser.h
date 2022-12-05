@@ -9,7 +9,6 @@ public:
 	virtual ~TestParser(void);
 	virtual void SetUp(void);
 
-
 public:
 	Parser parser;
 };

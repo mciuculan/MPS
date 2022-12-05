@@ -11,7 +11,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/lib/googletest/googletest/include/"
 	)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
 
 file(GLOB PROJECT_SOURCES *.cpp)
 file(GLOB PROJECT_HEADERS *.h)
