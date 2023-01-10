@@ -23,4 +23,5 @@ class Operation
 		static double applyGeometricMean(std::vector<double> array);
 		static double applyArithmeticMean(std::vector<double> array);
 		static double applyMultiplication(std::vector<double> array);
+		static std::string convertToString(int opIndex);
 };

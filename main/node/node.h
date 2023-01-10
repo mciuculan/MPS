@@ -7,24 +7,22 @@
 class Node
 {
 	private:
-		Node *parent;
-		double threshold = MAXFLOAT;
-		int noChildren;
 		std::vector<Node> children;
 		OperationType operation;
+		double value;
+		double threshold;
 
 	public:
 		Node();
+		Node(double threshold);
 
-		void generateInnerNode();
-
-		int getNoChildren() { return noChildren; };
-		double getThreshold() { return threshold; };
-		std::vector<Node> getChildren() { return children; };
+		std::vector<Node> & getChildren() { return children; };
 		OperationType getOperationType() { return operation; };
+		double getValue() { return value; };
+		double getThreshold() { return threshold; };
 
-		void setNoChildren(int noChildren);
 		void setThreshold(double threshold);
-		void setChildren(std::vector<Node> children);
+		void setValue(double value);
 		void setOperationType(OperationType operation);
+		void printNode();
 };

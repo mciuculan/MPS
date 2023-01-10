@@ -1,10 +1,20 @@
 #include "node.h"
 
-Node::Node() {}
-
-void Node::setNoChildren(int noChildren)
+Node::Node() 
 {
-	this->noChildren = noChildren;
+	this->threshold = 0;
+	this->value = 0;
+}
+Node::Node(double threshold) : threshold(threshold) {}
+
+void Node::setOperationType(OperationType operation)
+{
+	this->operation = operation;
+}
+
+void Node::setValue(double value)
+{
+	this->value = value;
 }
 
 void Node::setThreshold(double threshold)
@@ -12,14 +22,12 @@ void Node::setThreshold(double threshold)
 	this->threshold = threshold;
 }
 
-
-void Node::setChildren(std::vector<Node> children)
+void Node::printNode()
 {
-	this->children = children;
-}
-
-
-void Node::setOperationType(OperationType operation)
-{
-	this->operation = operation;
+	std::cout << "Operation: " << Operation::convertToString(this->getOperationType()) << "\n";
+	std::cout << "Children: " << this->children.size() << "\n";
+	for (int i = 0; i < (int) this->children.size(); ++i) {
+		std::cout << this->children[i].threshold << " ";
+	}
+	std::cout << "\n";
 }

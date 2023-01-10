@@ -1,12 +1,12 @@
 #include "parser.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 Parser::Parser() {}
 
 std::vector<InputData> Parser::traverseFiles(std::string path)
 {
-	int count = 0;
+	// int count = 0;
 	std::vector<InputData> files;
 
 	for (auto& entry : std::filesystem::directory_iterator(path)) {

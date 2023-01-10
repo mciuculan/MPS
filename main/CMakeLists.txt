@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_MIN_REQ_VERSION "3.10")
 
+set(CMAKE_CXX_STANDARD 17)
+# Don't add this line if you will try_compile with boost.
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project("MPS_Project")
 
 add_subdirectory(tests)
@@ -9,8 +13,8 @@ add_subdirectory(tests)
 
 include_directories(tests/)
 
-file(GLOB PROJECT_SOURCES parser/*.cpp)
-file(GLOB PROJECT_HEADERS parser/*.h)
+file(GLOB PROJECT_SOURCES parser/*.cpp inputData/*.cpp node/*.cpp operation/*.cpp randomTree/*.cpp solution/*.cpp)
+file(GLOB PROJECT_HEADERS parser/*.h inputData/*.h node/*.h operation/*.h randomTree/*.h)
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MTd")
 

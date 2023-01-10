@@ -8,19 +8,21 @@
 #include <stack>
 
 #include "../node/node.h"
+#include "../operation/operation.h"
 
 class RandomTree
 {
 	private:
-		int depth;
-		Node root;
-		std::stack<Node> stack;
-
+		std::vector<Node> leafSet;
+		std::queue<Node> leavesQueue;
+		
 	public:
 		RandomTree();
 
-		void generateTree(int depth, Node *src, Node *parent);
+		std::vector<Node> & getLeafSet() { return leafSet; };
+		std::queue<Node> & getLeavesQueue() { return leavesQueue; };
 
-		int getDepth() { return depth; }
-
+		void generateTreeHierarchy(std::queue<std::pair<int, OperationType>> choices, std::vector<int> leavesOrder);
+		void printTree(Node node);
+		void applyOp(Node *node);
 };

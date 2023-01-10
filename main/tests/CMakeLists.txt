@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_MIN_REQ_VERSION "3.10")
 
+set(CMAKE_CXX_STANDARD 17)
+# Don't add this line if you will try_compile with boost.
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project("Tests")
 
 set(BUILD_GMOCK ON)

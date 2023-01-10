@@ -48,3 +48,19 @@ double Operation::applyOperation(int opIndex, std::vector<double> array)
 
 	};
 }
+
+std::string Operation::convertToString(int opIndex)
+{
+	switch (opIndex)
+	{
+	case GEOMETRIC_MEAN:
+		return "gm";
+	
+	case ARITHMETIC_MEAN:
+		return "am";
+
+	case MULTIPLICATION:
+		return "*";
+
+	};
+}

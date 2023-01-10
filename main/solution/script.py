@@ -43,7 +43,7 @@ print(leaf_set)
 choices = []
 order   = []
 
-N = 4 
+N = 7
 
 for i in range(N):
     order.append(randint(0, leaf_set.__len__() - 1))
@@ -55,7 +55,7 @@ while N > 1:
     choices.append((picked, op))
     N = N - picked + 1
     
-print(choices, order)
+print(choices, len(order))
     
 
 stack = []

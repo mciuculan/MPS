@@ -1,4 +1,4 @@
-#include "../parser/parser.h"
+#include "../inputData/inputData.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -10,7 +10,7 @@ public:
 	virtual void SetUp(void);
 
 public:
-	Parser parser;
+	InputData inputData;
 };
 
 int run_tests(int argc, char **argv);
