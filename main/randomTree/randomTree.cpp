@@ -25,7 +25,6 @@ void RandomTree::generateTreeHierarchy(std::queue<std::pair<int, OperationType>>
 
 		leavesQueue.push(newNode);
 	}
-
 }
 
 void RandomTree::printTree(Node node)

@@ -12,6 +12,9 @@
 #include "../inputData/inputData.h"
 #include <filesystem>
 
+#define GLOBAL 0
+#define LOCAL 1
+
 class Parser
 {
 	private:

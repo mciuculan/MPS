@@ -4,73 +4,86 @@
 #include "../randomTree/randomTree.h"
 #include "../node/node.h"
 #include <utility>
+#include "../tests/tests.h"
 
 #define THRESHOLDS 15
 
 extern std::vector<OperationType> operations;
 
-int main()
+int main(int argc, char *argv[])
 {
-	Parser parser;
-	std::vector<InputData> files;
+	std::string mode;
+	std::cin >> mode;
 
-	files = parser.traverseFiles("../../data/MPS-Global/");
+	if (mode.compare("run") == 0)
+	{
 
-	std::pair<double, Node> fMeasureByOperationsSequence;
-	fMeasureByOperationsSequence.first = -1.0;
+		Parser parser;
+		std::vector<InputData> files;
 
-	for (int iteration = 0; iteration < 1000; ++iteration) {
-		std::cout << iteration << "\n";
+		files = parser.traverseFiles("../data/MPS-Global/");
 
-		int noLeaves = 45;
-		srand(time(NULL));
-		std::vector<int> leavesOrder;
-		double totalFMeasure = 0.0;
+		std::pair<double, Node> fMeasureByOperationsSequence;
+		fMeasureByOperationsSequence.first = -1.0;
 
-		for (int i = 0; i < noLeaves; ++i) {
-			leavesOrder.push_back(rand() % THRESHOLDS);
-		}
+		for (int iteration = 0; iteration < 10; ++iteration) {
+			std::cout << iteration << "\n";
 
-		int noPickedChildren;
-		OperationType op;
-		std::queue<std::pair<int, OperationType>> choices;
+			int noLeaves = 45;
+			srand(time(NULL));
+			std::vector<int> leavesOrder;
+			double totalFMeasure = 0.0;
 
-		while (noLeaves > 1) {
-			noPickedChildren = rand() % (noLeaves - 1) + 2;
-			op = operations[rand() % operations.size()];
-			choices.push({noPickedChildren, op});
-			noLeaves = noLeaves - noPickedChildren + 1;
-		}
-		
-		Node finalRoot = Node();
-		for (int fileIdx = 0; fileIdx < (int) files.size(); ++fileIdx) {
-			RandomTree tree = RandomTree();
-
-			for (auto i = 0; i < (int) files[fileIdx].getThresholds().size(); ++i) {
-				tree.getLeafSet().push_back(Node(files[fileIdx].getThresholds()[i]));
+			for (int i = 0; i < noLeaves; ++i) {
+				leavesOrder.push_back(rand() % THRESHOLDS);
 			}
 
-			tree.generateTreeHierarchy(choices, leavesOrder);
+			int noPickedChildren;
+			OperationType op;
+			std::queue<std::pair<int, OperationType>> choices;
 
-			if (fileIdx == 0) {
-				finalRoot = tree.getLeavesQueue().front();
+			while (noLeaves > 1) {
+				noPickedChildren = rand() % (noLeaves - 1) + 2;
+				op = operations[rand() % operations.size()];
+				choices.push({noPickedChildren, op});
+				noLeaves = noLeaves - noPickedChildren + 1;
+			}
+			
+			Node finalRoot = Node();
+			for (int fileIdx = 0; fileIdx < (int) files.size(); ++fileIdx) {
+				RandomTree tree = RandomTree();
+
+				for (auto i = 0; i < (int) files[fileIdx].getThresholds().size(); ++i) {
+					tree.getLeafSet().push_back(Node(files[fileIdx].getThresholds()[i]));
+				}
+
+				tree.generateTreeHierarchy(choices, leavesOrder);
+
+				if (fileIdx == 0) {
+					finalRoot = tree.getLeavesQueue().front();
+				}
+
+				tree.applyOp(&tree.getLeavesQueue().front());
+
+				totalFMeasure += files[fileIdx].getFMeasures()[InputData::getFMeasureIndex(tree.getLeavesQueue().front().getValue())];
 			}
 
-			tree.applyOp(&tree.getLeavesQueue().front());
-
-			totalFMeasure += files[fileIdx].getFMeasures()[InputData::getFMeasureIndex(tree.getLeavesQueue().front().getValue())];
+			double meanTotalFMeasure = totalFMeasure / files.size();
+			if (meanTotalFMeasure > fMeasureByOperationsSequence.first) {
+				fMeasureByOperationsSequence.first = meanTotalFMeasure;
+				fMeasureByOperationsSequence.second = finalRoot;
+			}
 		}
 
-		double meanTotalFMeasure = totalFMeasure / files.size();
-		if (meanTotalFMeasure > fMeasureByOperationsSequence.first) {
-			fMeasureByOperationsSequence.first = meanTotalFMeasure;
-			fMeasureByOperationsSequence.second = finalRoot;
-		}
+		std::cout << fMeasureByOperationsSequence.first << "\n";
+		RandomTree().printTree(fMeasureByOperationsSequence.second);
+		std::cout << "\n";
 	}
 
-	std::cout << fMeasureByOperationsSequence.first << "\n";
-	RandomTree().printTree(fMeasureByOperationsSequence.second);
-	std::cout << "\n";
+	if (mode.compare("test") == 0)
+	{
+		return run_tests(argc, argv);
+	}
 
 	return 0;
 }
