@@ -7,6 +7,9 @@ InputData::InputData(std::string filePath)
 	setFilePath(filePath);
 }
 
+InputDataLocal::InputDataLocal() {}
+InputDataLocal::InputDataLocal(std::string filePath) : filePath(filePath) {}
+
 void InputData::parseFile()
 {
 	std::fstream fs;
@@ -90,4 +93,54 @@ void InputData::setThresholds(std::vector<double> thresholds)
 void InputData::setFMeasures(std::vector<double> fMeasures)
 {
 	this->fMeasures = fMeasures;
+}
+
+
+void InputDataLocal::setFilePath(std::string filePath)
+{
+	this->filePath = filePath;
+}
+
+void InputDataLocal::setThresholds(std::vector<std::vector<double>> thresholds)
+{
+	this->thresholds = thresholds;
+}
+
+void InputDataLocal::setPixelsValue(std::vector<double> pixelsValue)
+{
+	this->pixelsValue = pixelsValue;
+}
+
+void InputDataLocal::setPixelsClass(std::vector<int> pixelsClass)
+{
+	this->pixelsClass = pixelsClass;
+}
+
+void InputDataLocal::parseFile()
+{
+	std::fstream fs;
+
+	fs.open(filePath, std::ios::in);
+
+	std::string line, temp, word;
+
+	while (fs >> line) {
+		this->noLines++;
+		std::stringstream str(line);
+
+		getline(str, word, ',');
+		pixelsValue.push_back(std::stod(word));
+		getline(str, word, ',');
+		pixelsClass.push_back(std::stoi(word));
+
+		std::vector<double> pixelThresholds;
+
+		while (getline(str, word, ',')) {	
+			pixelThresholds.push_back(std::stod(word));
+		}
+
+		thresholds.push_back(pixelThresholds);
+	}
+
+	fs.close();
 }

@@ -1,8 +1,6 @@
 #include "randomTree.h"
 
-
 RandomTree::RandomTree() {}
-
 
 void RandomTree::generateTreeHierarchy(std::queue<std::pair<int, OperationType>> choices, std::vector<int> leavesOrder)
 {
@@ -70,4 +68,35 @@ void RandomTree::applyOp(Node *node)
 
 	node->setValue(Operation::applyOperation(node->getOperationType(), values));
 
+}
+
+void RandomTree::printSequenceOp(std::queue<std::pair<int, OperationType>> choices)
+{
+	std::cout << "[";
+	while (!choices.empty()) {
+		std::pair<int, OperationType> choice = choices.front();
+		choices.pop();
+
+		std::cout << "(" << choice.first << ", " << Operation::convertToString(choice.second) << ")";
+		if (!choices.empty()) {
+			std::cout << ", ";
+		}
+	}
+
+	std::cout << "]\n";
+}
+
+PixelType RandomTree::getPixelType(double value, int pixelClass)
+{
+	if (value > 0.5 && pixelClass != 1)
+		return FALSE_NEGATIVE;
+
+	if (value > 0.5 && pixelClass == 1)
+		return TRUE_NEGATIVE;
+
+	if (value <= 0.5 && pixelClass != 0)
+		return FALSE_POSITIVE;
+	
+	if (value <= 0.5 && pixelClass == 0)
+		return TRUE_POSITIVE;
 }

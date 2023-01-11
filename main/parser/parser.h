@@ -12,6 +12,9 @@
 #include "../inputData/inputData.h"
 #include <filesystem>
 
+#define GLOBAL 0
+#define LOCAL 1
+
 class Parser
 {
 	private:
@@ -20,4 +23,5 @@ class Parser
 		Parser();
 
 		std::vector<InputData> traverseFiles(std::string path);
+		std::vector<InputDataLocal> traverseFilesLocal(std::string path);
 };

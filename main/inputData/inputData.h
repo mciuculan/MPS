@@ -36,3 +36,29 @@ class InputData
 		void setThresholds(std::vector<double> thresholds);
 		void setFMeasures(std::vector<double> fMeasures);
 };
+
+class InputDataLocal
+{
+	private:
+		std::string filePath;
+		std::vector<std::vector<double>> thresholds;
+		std::vector<int> pixelsClass;
+		std::vector<double> pixelsValue;
+
+	public:
+		InputDataLocal();
+		InputDataLocal(std::string filePath);
+		
+		
+		int noLines = 0;
+		void parseFile();
+		std::vector<int> getPixelsClass() { return pixelsClass; };
+		std::string getFilePath() {	return filePath; };
+		std::vector<std::vector<double>> getThresholds() { return thresholds; };
+		std::vector<double> getPixelsValue() { return pixelsValue; };
+		
+		void setFilePath(std::string filePath);
+		void setThresholds(std::vector<std::vector<double>> thresholds);
+		void setPixelsClass(std::vector<int> pixelsClass);
+		void setPixelsValue(std::vector<double> pixelsValue);
+};
