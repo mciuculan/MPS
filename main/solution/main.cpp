@@ -5,6 +5,8 @@
 #include "../node/node.h"
 #include <utility>
 #include <map>
+#include <chrono>
+#include <omp.h>
 
 extern std::vector<OperationType> operations;
 
@@ -22,9 +24,11 @@ int main()
 
 	srand(time(NULL));
 
+	// auto start = std::chrono::steady_clock::now();
+
 	std::cout << "Global:\n";
 	std::cout << "Numar fisiere: " << files.size() << "\n";
-	for (int iteration = 0; iteration < 20; ++iteration) {
+	for (int iteration = 0; iteration < 100; ++iteration) {
 		int noLeaves = 45;
 
 		double totalFMeasure = 0.0;
@@ -39,8 +43,6 @@ int main()
 			choices.push({noPickedChildren, op});
 			noLeaves = noLeaves - noPickedChildren + 1;
 		}
-
-		// RandomTree::printSequenceOp(choices);
 		
 		noLeaves = 45;
 
@@ -51,7 +53,7 @@ int main()
 				leavesOrder.push_back(rand() % files[fileIdx].getThresholds().size());
 			}
 
-			RandomTree tree = RandomTree();
+			RandomTree tree;
 
 			for (auto i = 0; i < (int) files[fileIdx].getThresholds().size(); ++i) {
 				tree.getLeafSet().push_back(Node(files[fileIdx].getThresholds()[i]));
@@ -81,7 +83,8 @@ int main()
 	std::pair<double, std::queue<std::pair<int, OperationType>>> fMeasureByOperationsSequenceLocal;
 	fMeasureByOperationsSequenceLocal.first = -1.0;
 	
-	for (int iteration = 0; iteration < 1; ++iteration) {
+	for (int iteration = 0; iteration < 5; ++iteration) {
+		std::cout << "iteration " << iteration << "\n";
 		double totalFMeasure = 0.0;
 		int noLeaves = 45;
 
@@ -95,8 +98,6 @@ int main()
 			choices.push({noPickedChildren, op});
 			noLeaves = noLeaves - noPickedChildren + 1;
 		}
-
-		// RandomTree::printSequenceOp(choices);
 		
 		noLeaves = 45;
 		for (int fileIdx = 0; fileIdx < (int) filesLocal.size(); ++fileIdx) {
@@ -105,6 +106,7 @@ int main()
 			InputDataLocal data = filesLocal[fileIdx];
 			int noPixels = data.noLines;
 
+			#pragma omp parallel for
 			for (int lineIdx = 0; lineIdx < noPixels; ++lineIdx) {
 				std::vector<int> leavesOrder;
 
@@ -112,11 +114,11 @@ int main()
 					leavesOrder.push_back(rand() % 10);
 				}
 
-				RandomTree tree = RandomTree();
+				RandomTree tree;
 				std::vector<double> crtThresholds = data.getThresholds()[lineIdx];
 
 				for (auto i = 0; i < 10; ++i) {
-					tree.getLeafSet().push_back(Node(crtThresholds[i]));
+					tree.getLeafSet().emplace_back(crtThresholds[i]);
 				}
 
 				tree.generateTreeHierarchy(choices, leavesOrder);
@@ -126,6 +128,8 @@ int main()
 				double lineValue = tree.getLeavesQueue().front().getValue();
 
 				PixelType p = RandomTree::getPixelType(lineValue, data.getPixelsClass()[lineIdx]);
+
+				#pragma omp critical
 				map[p]++;
 			}
 
@@ -143,6 +147,10 @@ int main()
 	std::cout << fMeasureByOperationsSequenceLocal.first << "\n";
 	RandomTree::printSequenceOp(fMeasureByOperationsSequenceLocal.second);
 	std::cout << "\n";
+
+	// auto end = std::chrono::steady_clock::now();
+    // std::chrono::duration<double> elapsed_seconds = end - start;
+    // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
 	return 0;
 }

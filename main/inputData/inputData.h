@@ -28,7 +28,7 @@ class InputData
 		std::pair<double, double> getMaxScoreByThreshold();
 
 		std::string getFilePath() {	return filePath; };
-		std::vector<double> getThresholds() { return thresholds; };
+		std::vector<double>& getThresholds() { return thresholds; };
 		std::vector<double> getFMeasures() { return fMeasures; };
 		double getIdealThreshold() { return idealThreshold; };
 		
@@ -54,7 +54,7 @@ class InputDataLocal
 		void parseFile();
 		std::vector<int> getPixelsClass() { return pixelsClass; };
 		std::string getFilePath() {	return filePath; };
-		std::vector<std::vector<double>> getThresholds() { return thresholds; };
+		std::vector<std::vector<double>>& getThresholds() { return thresholds; };
 		std::vector<double> getPixelsValue() { return pixelsValue; };
 		
 		void setFilePath(std::string filePath);

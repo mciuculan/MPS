@@ -46,6 +46,8 @@ double Operation::applyOperation(int opIndex, std::vector<double> array)
 	case MULTIPLICATION:
 		return applyMultiplication(array);
 
+	default:
+		return applyMultiplication(array);
 	};
 }
 
@@ -62,5 +64,7 @@ std::string Operation::convertToString(int opIndex)
 	case MULTIPLICATION:
 		return "*";
 
+	default:
+		return "*";
 	};
 }

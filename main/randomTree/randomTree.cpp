@@ -99,4 +99,6 @@ PixelType RandomTree::getPixelType(double value, int pixelClass)
 	
 	if (value <= 0.5 && pixelClass == 0)
 		return TRUE_POSITIVE;
+	
+	return TRUE_POSITIVE;
 }
