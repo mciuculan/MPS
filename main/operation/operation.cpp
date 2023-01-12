@@ -1,10 +1,11 @@
 #include "operation.h"
 
-std::vector<OperationType> operations {OperationType::GEOMETRIC_MEAN, OperationType::ARITHMETIC_MEAN, OperationType::MULTIPLICATION};
+std::vector<OperationType> operations {OperationType::GEOMETRIC_MEAN, OperationType::ARITHMETIC_MEAN, 
+	OperationType::MULTIPLICATION, OperationType::MIN, OperationType::MAX};
 
 Operation::Operation() {}
 
-double Operation::applyArithmeticMean(std::vector<double> array)
+double Operation::applyArithmeticMean(std::vector<double>& array)
 {
 	double sum = 0.0;
 
@@ -15,7 +16,7 @@ double Operation::applyArithmeticMean(std::vector<double> array)
 	return sum / array.size();
 }
 
-double Operation::applyMultiplication(std::vector<double> array)
+double Operation::applyMultiplication(std::vector<double>& array)
 {
 	auto result = 1.0;
 
@@ -26,14 +27,24 @@ double Operation::applyMultiplication(std::vector<double> array)
 	return result;
 }
 
-double Operation::applyGeometricMean(std::vector<double> array)
+double Operation::applyGeometricMean(std::vector<double>& array)
 {
 	auto multiplication = Operation::applyMultiplication(array);
 
 	return pow(multiplication, (double)1 / array.size());
 }
 
-double Operation::applyOperation(int opIndex, std::vector<double> array)
+double Operation::applyMin(std::vector<double>& array)
+{
+	return *std::min_element(array.begin(), array.end());
+}
+
+double Operation::applyMax(std::vector<double>& array)
+{
+	return *std::max_element(array.begin(), array.end());
+}
+
+double Operation::applyOperation(int opIndex, std::vector<double>& array)
 {
 	switch (opIndex)
 	{
@@ -45,6 +56,12 @@ double Operation::applyOperation(int opIndex, std::vector<double> array)
 
 	case MULTIPLICATION:
 		return applyMultiplication(array);
+
+	case MIN:
+		return applyMin(array);
+
+	case MAX:
+		return applyMax(array);
 
 	default:
 		return applyMultiplication(array);
@@ -63,6 +80,12 @@ std::string Operation::convertToString(int opIndex)
 
 	case MULTIPLICATION:
 		return "*";
+
+	case MIN:
+		return "min";
+	
+	case MAX:
+		return "max";
 
 	default:
 		return "*";

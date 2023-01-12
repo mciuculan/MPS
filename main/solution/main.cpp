@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
 		std::vector<InputData> files;
 		std::vector<InputDataLocal> filesLocal;
 
-		files = parser.traverseFiles("../../data/MPS-Global/");
-		filesLocal = parser.traverseFilesLocal("../../data/MPS-Local/");
+		files = parser.traverseFiles("../data/MPS-Global/");
+		filesLocal = parser.traverseFilesLocal("../data/MPS-Local/");
 
 		std::pair<double, std::queue<std::pair<int, OperationType>>> fMeasureByOperationsSequence;
 		fMeasureByOperationsSequence.first = -1.0;
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 				RandomTree tree;
 
 				for (auto i = 0; i < (int) files[fileIdx].getThresholds().size(); ++i) {
-					tree.getLeafSet().push_back(Node(files[fileIdx].getThresholds()[i]));
+					tree.getLeafSet().emplace_back(files[fileIdx].getThresholds()[i]);
 				}
 
 				tree.generateTreeHierarchy(choices, leavesOrder);

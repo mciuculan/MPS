@@ -60,6 +60,18 @@ TEST_F(TestOperation, correct_answer_multiplication)
     ASSERT_DOUBLE_EQ(operation.applyOperation(OperationType::MULTIPLICATION, array), 479688.43442400004);
 }
 
+TEST_F(TestOperation, correct_answer_min)
+{
+    std::vector<double> array = {2.4, -53.7, 241.53, 23, -0.67};
+    ASSERT_DOUBLE_EQ(operation.applyOperation(OperationType::MIN, array), -53.7);
+}
+
+TEST_F(TestOperation, correct_answer_max)
+{
+    std::vector<double> array = {2.4, -53.7, 241.53, 23, -0.67};
+    ASSERT_DOUBLE_EQ(operation.applyOperation(OperationType::MAX, array), 241.53);
+}
+
 TestRandomTree::TestRandomTree()
 {
 }

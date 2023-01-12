@@ -1,4 +1,4 @@
 cmake main/. -Bbuild
 cd build
 make 
-./MPS_Project
+./MPS_Project 
